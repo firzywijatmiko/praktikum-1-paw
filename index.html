@@ -94,3 +94,39 @@
     <button onclick="getWeather()">Cari</button>
     <div class="weather-info" id="weatherInfo"></div>
   </div>
+
+  <script>
+    async function getWeather() {
+      const location = document.getElementById("locationInput").value;
+      const apiKey = "b269c4ff7eae4e06a6c41926250610"; // Ganti dengan API key kamu
+      const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&lang=id`;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error("Data tidak ditemukan");
+        }
+        const data = await response.json();
+
+        document.getElementById("weatherInfo").innerHTML = `
+          <div class="icon">
+            <img src="https:${data.current.condition.icon}" alt="Cuaca">
+          </div>
+          <div class="temp">${data.current.temp_c}°C</div>
+          <p><b>${data.current.condition.text}</b></p>
+          <div class="details">
+            <p><b>Negara:</b> ${data.location.country}</p>
+            <p><b>Provinsi:</b> ${data.location.region}</p>
+            <p><b>Kecamatan:</b> ${data.location.name}</p>
+            <p><b>Longitude:</b> ${data.location.lon}</p>
+            <p><b>Latitude:</b> ${data.location.lat}</p>
+          </div>
+        `;
+      } catch (error) {
+        document.getElementById("weatherInfo").innerHTML = `<p style="color:red;">${error.message}</p>`;
+      }
+    }
+  </script>
+</body>
+</html>
+```
